@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>GeneBase</title>
+</head>
+
+<body class="m-4">
+    <div class="my-3 d-flex" style="align-items:baseline">
+        <h1 style="margin-right: 1rem;">🧬GeneBase</h1>
+        <a href="/" class="text-muted">indietro</a>
+    </div>
+    <form id="form">
+        <label for="inputop1" class="form-label">Codice</label>
+        <div class="d-flex">
+            <select class="form-select form-select-sm m-2" aria-label=".form-select-sm example">
+                <option selected>Seleziona</option>
+            </select>
+            <button type="submit" class="btn btn-primary m-2">Cerca</button>
+        </div>
+    </form>
+    <p id="result"></p>
+</body>
+<script src="query.js"></script>
+<script>
+    document.querySelector("form").addEventListener("submit", (e) => {
+        document.querySelector("#result").innerHTML = "";
+        e.preventDefault();
+        queryOp4();
+    })
+
+    list = document.querySelector("select");
+    fetch("/geni").then(res => res.json()).then(json => {
+        obj = JSON.parse(json);
+        console.log(obj);
+        for(let x of obj) {
+            list.options[list.options.length] = new Option(x.codice, x.codice);
+        }
+    })
+</script>
+
+</html>
