@@ -1,7 +1,7 @@
 
 function createTable(myObj) {
-    
-    if(myObj.length == 0){
+
+    if (myObj.length == 0) {
         return "Nessun dato corrispondente alla ricerca"
     }
 
@@ -50,7 +50,7 @@ function queryOp1() {
 function queryOp2() {
     nome = document.querySelector("select").value.split(" ")[0];
     cognome = document.querySelector("select").value.split(" ")[1];
-    
+
     fetch(`/op2?nome="${nome}"&cognome="${cognome}"`).then(res => res.json()).then(json => {
         console.log(json)
         document.getElementById("result").innerHTML = createTable(JSON.parse(json));
@@ -60,7 +60,7 @@ function queryOp2() {
 function queryOp3() {
     nome = document.querySelector("select").value;
     rivista = document.querySelector("#rivista").value;
-    
+
     fetch(`/op3?nome=${nome}&rivista=${rivista}`).then(res => res.json()).then(json => {
         console.log(json)
         document.getElementById("result").innerHTML = createTable(JSON.parse(json));
@@ -70,7 +70,7 @@ function queryOp3() {
 
 function queryOp4() {
     codice = document.querySelector("select").value;
-    
+
     fetch(`/op4?codice=${codice}`).then(res => res.json()).then(json => {
         console.log(json)
         document.getElementById("result").innerHTML = createTable(JSON.parse(json));
@@ -80,14 +80,14 @@ function queryOp4() {
 
 function queryOp5() {
     nome = document.querySelector("select").value;
-    
+
     fetch(`/op5?nome=${nome}`).then(res => res.json()).then(json => {
         console.log(json)
         document.getElementById("result").innerHTML = createTable(JSON.parse(json));
     })
 }
 
-function queryOp6() {    
+function queryOp6() {
     fetch(`/op6`).then(res => res.json()).then(json => {
         console.log(json)
         document.getElementById("result").innerHTML = createTable(JSON.parse(json));
@@ -96,7 +96,7 @@ function queryOp6() {
 
 function queryOp7() {
     nome = document.querySelector("select").value;
-    
+
     fetch(`/op7?nome=${nome}`).then(res => res.json()).then(json => {
         console.log(json)
         document.getElementById("result").innerHTML = createTable(JSON.parse(json));
@@ -106,35 +106,59 @@ function queryOp7() {
 function queryOp8() {
     nome = document.querySelector("select").value.split(" ")[0];
     cognome = document.querySelector("select").value.split(" ")[1];
-    
+
     fetch(`/op8?nome="${nome}"&cognome="${cognome}"`).then(res => res.json()).then(json => {
         console.log(json)
         document.getElementById("result").innerHTML = createTable(JSON.parse(json));
     })
 }
 
-function queryVarianti() {    
+async function queryOp9(list, titolare) {
+    console.log(list, titolare);
+    if(!list.map(x => x.codice).includes( titolare.codice)) {
+        console.log("non incluso");
+        return {status: false};
+    } 
+
+    let res = await fetch("/team");
+    let json = await res.json();
+    let codiceteam = 1001 + JSON.parse(json).length;
+    await fetch("/createteam?codice=" + codiceteam + "&titolare=" + titolare.codice);
+    list.forEach(async e => {
+        await fetch("/addtoteam?codice=" + e.codice + "&team=" + codiceteam);
+    })
+    return {status: true, team: codiceteam};
+}
+
+function queryOp10() {
+    fetch(`/op10`).then(res => res.json()).then(json => {
+        console.log(json)
+        document.getElementById("result").innerHTML = createTable(JSON.parse(json));
+    })
+}
+
+function queryVarianti() {
     fetch(`/varianti`).then(res => res.json()).then(json => {
         console.log(json)
         document.getElementById("result").innerHTML = createTable(JSON.parse(json));
     })
 }
 
-function queryGeni() {    
+function queryGeni() {
     fetch(`/geni/all`).then(res => res.json()).then(json => {
         console.log(json)
         document.getElementById("result").innerHTML = createTable(JSON.parse(json));
     })
 }
 
-function queryOrganismi() {    
+function queryOrganismi() {
     fetch(`/organismi/all`).then(res => res.json()).then(json => {
         console.log(json)
         document.getElementById("result").innerHTML = createTable(JSON.parse(json));
     })
 }
 
-function queryPubblicazioni() {    
+function queryPubblicazioni() {
     fetch(`/pubblicazioni`).then(res => res.json()).then(json => {
         console.log(json)
         document.getElementById("result").innerHTML = createTable(JSON.parse(json));
