@@ -18,6 +18,6 @@ Procedimento per l'installazione locale:
 - Aprire una shell nella cartella del progetto e eseguire i seguenti comandi:
 ```
     $ npm i
-    $ npm run dev
+    $ npm run start
 ```
 - Aprire un web browser e recarsi all'indirizzo http://localhost:4000
